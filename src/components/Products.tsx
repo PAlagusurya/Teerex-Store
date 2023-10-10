@@ -3,18 +3,19 @@ import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { ProductDetail } from "../models/model";
 import ProductList from "./ProductList";
-import axios from "axios";
+import Sidebar from "./Sidebar";
+import ProductService from "../services/product.service";
 
 const Products: React.FC = () => {
-  const [cartItems, setCartItems] = useState<ProductDetail[]>([]);
+  const [products, setProducts] = useState<ProductDetail[]>([]);
+
+  const productService = new ProductService();
 
   const getProducts = async () => {
     try {
-      const url =
-        "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/catalogue.json";
-      const response = await axios.get(url);
+      const response = await productService.getAllProducts();
       if (response.status === 200) {
-        setCartItems(response.data);
+        setProducts(response.data);
       }
     } catch (e) {
       console.log(e);
@@ -28,13 +29,13 @@ const Products: React.FC = () => {
   return (
     <Grid container spacing={2} mt={5}>
       <Grid item xs={3}>
-        SIDEBAR
+        <Sidebar products={products} />
       </Grid>
       <Grid item xs={9}>
-        <Box sx={{ display: "flex", mb: 5, gap: 3 }}>
+        <Box sx={{ display: "flex", mb: 5, gap: 3, ml: 5 }}>
           <TextField
             variant="standard"
-            sx={{ width: "60vw" }}
+            sx={{ width: "50vw" }}
             placeholder="Search for Products"
           />
           <SearchIcon
@@ -49,9 +50,9 @@ const Products: React.FC = () => {
           />
         </Box>
         <Grid container rowSpacing={3} columnSpacing={2}>
-          {cartItems.map((item: ProductDetail) => (
-            <Grid item xs={12} md={4}>
-              <ProductList key={item.id} {...item} />
+          {products.map((item: ProductDetail) => (
+            <Grid item xs={12} md={4} key={item.id}>
+              <ProductList {...item} />
             </Grid>
           ))}
         </Grid>
