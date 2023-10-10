@@ -15,7 +15,7 @@ const Header: React.FC = () => {
       }}
     >
       <Typography variant="h5">Teerex Store</Typography>
-      <Box sx={{ display: "flex", gap: "10px" }}>
+      <Box sx={{ display: "flex", gap: "15px" }}>
         <Typography variant="h6">Products</Typography>
         <AddShoppingCartIcon fontSize="large" />
       </Box>
