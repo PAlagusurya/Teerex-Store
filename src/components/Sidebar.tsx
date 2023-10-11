@@ -7,6 +7,7 @@ import {
   Checkbox,
   FormControlLabel,
   Typography,
+  FormGroup,
 } from "@mui/material";
 
 interface props {
@@ -28,13 +29,22 @@ const Sidebar: React.FC<props> = ({ products }) => {
   return (
     <Paper sx={{ m: 2, p: 3, width: "15vw" }}>
       {Object.entries(filteredProducts).map(([key, value]) => (
-        <Box>
+        <Box key={key}>
           <Typography variant="h6" my={2} fontWeight={600}>
             {key.charAt(0).toUpperCase() + key.slice(1)}
           </Typography>
-          {value.map((item: number | string) => {
-            return <Typography>{item}</Typography>;
-          })}
+          <FormGroup>
+            {value.map((item: number | string) => {
+              return (
+                <FormControlLabel
+                  sx={{ mt: -1.5 }}
+                  key={item}
+                  control={<Checkbox />}
+                  label={item}
+                />
+              );
+            })}
+          </FormGroup>
         </Box>
       ))}
     </Paper>
