@@ -22,7 +22,18 @@ const ProductList: React.FC<props> = (props) => {
         <Typography variant="body2" sx={{ fontWeight: "600", mt: 1 }}>
           Rs.{price}
         </Typography>
-        <Button variant="contained">Add to cart</Button>
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: "black",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "#222222",
+            },
+          }}
+        >
+          Add to cart
+        </Button>
       </CardContent>
     </Card>
   );

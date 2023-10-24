@@ -12,9 +12,15 @@ import {
 
 interface props {
   products: ProductDetail[];
+  checkedItems: Record<string, any>;
+  onCheckedItemsChange: (newCheckedItems: Record<string, any>) => void;
 }
 
-const Sidebar: React.FC<props> = ({ products }) => {
+const Sidebar: React.FC<props> = ({
+  products,
+  checkedItems,
+  onCheckedItemsChange,
+}) => {
   const [filteredProducts, setFilteredProducts] = useState<Record<string, any>>(
     {}
   );
@@ -25,6 +31,30 @@ const Sidebar: React.FC<props> = ({ products }) => {
       setFilteredProducts(response);
     }
   }, [products]);
+
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    key: string,
+    item: any
+  ) => {
+    const updatedItem = { ...checkedItems };
+
+    if (updatedItem[key]) {
+      if (updatedItem[key].includes(item)) {
+        // Item is already checked, so remove it
+        updatedItem[key] = updatedItem[key].filter(
+          (checkedItem: string | number) => checkedItem !== item
+        );
+      } else {
+        // Item is not checked, so add it
+        updatedItem[key] = [...updatedItem[key], item];
+      }
+    } else {
+      updatedItem[key] = [item];
+    }
+
+    onCheckedItemsChange(updatedItem);
+  };
 
   return (
     <Paper sx={{ m: 2, p: 3, width: "15vw" }}>
@@ -39,7 +69,13 @@ const Sidebar: React.FC<props> = ({ products }) => {
                 <FormControlLabel
                   sx={{ mt: -1.5 }}
                   key={item}
-                  control={<Checkbox />}
+                  control={
+                    <Checkbox
+                      onChange={(event) =>
+                        handleCheckboxChange(event, key, item)
+                      }
+                    />
+                  }
                   label={item}
                 />
               );

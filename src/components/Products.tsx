@@ -1,6 +1,14 @@
-import { Grid, TextField, Box, Button } from "@mui/material";
+import {
+  Grid,
+  TextField,
+  Box,
+  Button,
+  useMediaQuery,
+  Drawer,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
+import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { ProductDetail } from "../models/model";
 import ProductList from "./ProductList";
 import Sidebar from "./Sidebar";
@@ -9,8 +17,20 @@ import ProductService from "../services/product.service";
 const Products: React.FC = () => {
   const [products, setProducts] = useState<ProductDetail[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<ProductDetail[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   const [debounceTimeout, setDebounceTimeout] = useState<any>(0);
+  const [checkedItems, setCheckedItems] = useState<Record<string, any>>({});
+  const [searchText, setSearchText] = useState<string>();
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+
+  const openDrawer = () => {
+    setIsDrawerOpen(true);
+  };
+
+  const closeDrawer = () => {
+    setIsDrawerOpen(false);
+  };
+
+  const breakpoint = useMediaQuery("(min-width:768px)");
 
   const productService = new ProductService();
 
@@ -19,6 +39,7 @@ const Products: React.FC = () => {
       const response = await productService.getAllProducts();
       if (response.status === 200) {
         setProducts(response.data);
+        setFilteredProducts(response.data);
       }
     } catch (e) {
       console.log(e);
@@ -29,6 +50,10 @@ const Products: React.FC = () => {
     getProducts();
   }, []);
 
+  useEffect(() => {
+    filterAndSearch();
+  }, [checkedItems, searchText]);
+
   const debounceSearch = (e: any) => {
     const value = e.target.value;
 
@@ -36,24 +61,55 @@ const Products: React.FC = () => {
       clearTimeout(debounceTimeout);
     }
     const timeout = setTimeout(() => {
-      performSearch(value);
+      setSearchText(value);
     }, 500);
 
     setDebounceTimeout(timeout);
   };
 
-  const performSearch = (searchText: string) => {
-    const filteredProducts = products.map((product) => {
-      console.log("PRODUCT:", product);
+  const filterAndSearch = () => {
+    let filteredResponse = products;
+
+    if (searchText) {
+      filteredResponse = products.filter((product) => {
+        const attributeToJoin = ["name", "type", "color"];
+        const concatenatedValues = attributeToJoin
+          .map((attribute) => product[attribute])
+          .join("")
+          .toLowerCase();
+        return concatenatedValues.includes(searchText.toLowerCase());
+      });
+    }
+
+    Object.entries(checkedItems).every(([key, values]) => {
+      filteredResponse = filteredResponse.filter((product) =>
+        Object.entries(checkedItems).every(
+          ([key, values]) =>
+            values.length === 0 || values.includes(product[key])
+        )
+      );
     });
+
+    setFilteredProducts(filteredResponse);
+  };
+
+  const handleCheckedItemChange = (newCheckedItems: Record<string, any>) => {
+    setCheckedItems(newCheckedItems);
   };
 
   return (
     <Grid container spacing={2} mt={5}>
-      <Grid item xs={3}>
-        <Sidebar products={products} />
-      </Grid>
-      <Grid item xs={9}>
+      {breakpoint && (
+        <Grid item md={3}>
+          <Sidebar
+            products={products}
+            checkedItems={checkedItems}
+            onCheckedItemsChange={handleCheckedItemChange}
+          />
+        </Grid>
+      )}
+
+      <Grid item xs={breakpoint ? 9 : 12} m={breakpoint ? 0 : 3}>
         <Box sx={{ display: "flex", mb: 5, gap: 3, ml: 5 }}>
           <TextField
             variant="standard"
@@ -64,26 +120,52 @@ const Products: React.FC = () => {
             onChange={(e) => debounceSearch(e)}
           />
           <Button
+            defaultValue={searchText}
             sx={{
-              px: 2,
-              py: 1.5,
               color: "white",
-              backgroundColor: "grey",
+              backgroundColor: "black",
               borderRadius: 3,
               mt: -1,
+              "&:hover": {
+                backgroundColor: "#222222",
+                boxShadow: "none",
+              },
             }}
             startIcon={<SearchIcon sx={{ ml: 1 }} />}
-            onClick={(e) => debounceSearch(e)}
+            onClick={filterAndSearch}
           />
+          {!breakpoint ? (
+            <Button
+              sx={{
+                color: "white",
+                backgroundColor: "black",
+                borderRadius: 3,
+                mt: -1,
+                "&:hover": {
+                  backgroundColor: "#222222",
+                  boxShadow: "none",
+                },
+              }}
+              startIcon={<FilterAltOutlinedIcon sx={{ ml: 1 }} />}
+              onClick={openDrawer}
+            />
+          ) : null}
         </Box>
         <Grid container rowSpacing={3} columnSpacing={2}>
-          {products.map((item: ProductDetail) => (
+          {filteredProducts.map((item: ProductDetail) => (
             <Grid item xs={12} md={4} key={item.id}>
               <ProductList {...item} />
             </Grid>
           ))}
         </Grid>
       </Grid>
+      <Drawer anchor="right" open={isDrawerOpen} onClose={closeDrawer}>
+        <Sidebar
+          products={products}
+          checkedItems={checkedItems}
+          onCheckedItemsChange={handleCheckedItemChange}
+        />
+      </Drawer>
     </Grid>
   );
 };

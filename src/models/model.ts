@@ -8,4 +8,5 @@ export interface ProductDetail {
   color: string;
   gender: string;
   quantity: number;
+  [key: string]: string | number;
 }
