@@ -71,6 +71,7 @@ const Sidebar: React.FC<props> = ({
                   key={item}
                   control={
                     <Checkbox
+                      checked={checkedItems[key]?.includes(item)}
                       onChange={(event) =>
                         handleCheckboxChange(event, key, item)
                       }

@@ -5,24 +5,27 @@ const getProductsByCategory = (products: ProductDetail[]) => {
   const result: Record<string, any> = {};
 
   products.forEach((product) => {
-    for (let [key, value] of Object.entries(product)) {
-      const isPresent = categories.includes(key);
-
+    categories.forEach((key) => {
       if (key === "price") {
-        value = Number(value);
+        result[key]
+          ? result[key].push(product[key])
+          : (result[key] = [Number(product[key])]);
+      } else {
+        result[key]
+          ? result[key].push(product[key])
+          : (result[key] = [product[key]]);
       }
-
-      if (isPresent) {
-        result[key] ? result[key].push(value) : (result[key] = [value]);
-        const uniqueValues = Array.from(new Set(result[key]));
-        result[key] = uniqueValues;
-      }
-    }
-
-    if (result["price"]) {
-      result["price"].sort((a: number, b: number) => a - b);
-    }
+    });
   });
+
+  for (let [key] of Object.entries(result)) {
+    const uniqueValues = Array.from(new Set(result[key]));
+    result[key] = uniqueValues;
+  }
+
+  if (result["price"]) {
+    result["price"].sort((a: number, b: number) => a - b);
+  }
 
   return result;
 };

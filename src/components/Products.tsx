@@ -30,7 +30,7 @@ const Products: React.FC = () => {
     setIsDrawerOpen(false);
   };
 
-  const breakpoint = useMediaQuery("(min-width:768px)");
+  const breakpoint = useMediaQuery("(min-width:600px)");
 
   const productService = new ProductService();
 
@@ -99,15 +99,15 @@ const Products: React.FC = () => {
 
   return (
     <Grid container spacing={2} mt={5}>
-      {breakpoint && (
-        <Grid item md={3}>
+      {breakpoint ? (
+        <Grid item xs={3}>
           <Sidebar
             products={products}
             checkedItems={checkedItems}
             onCheckedItemsChange={handleCheckedItemChange}
           />
         </Grid>
-      )}
+      ) : null}
 
       <Grid item xs={breakpoint ? 9 : 12} m={breakpoint ? 0 : 3}>
         <Box sx={{ display: "flex", mb: 5, gap: 3, ml: 5 }}>
@@ -153,7 +153,7 @@ const Products: React.FC = () => {
         </Box>
         <Grid container rowSpacing={3} columnSpacing={2}>
           {filteredProducts.map((item: ProductDetail) => (
-            <Grid item xs={12} md={4} key={item.id}>
+            <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
               <ProductList {...item} />
             </Grid>
           ))}
