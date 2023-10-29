@@ -24,7 +24,8 @@ const getProductsByCategory = (products: ProductDetail[]) => {
   }
 
   if (result["price"]) {
-    result["price"].sort((a: number, b: number) => a - b);
+    result["price"].splice(0, 4);
+    result["price"].push("0-Rs.250", "Rs.251-400", "Rs.450");
   }
 
   return result;

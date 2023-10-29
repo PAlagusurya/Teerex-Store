@@ -8,5 +8,6 @@ export interface ProductDetail {
   color: string;
   gender: string;
   quantity: number;
-  [key: string]: string | number;
+  quantityCount?: any;
+  [key: string]: string | number | undefined;
 }

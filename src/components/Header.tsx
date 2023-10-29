@@ -3,8 +3,14 @@ import React from "react";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { grey } from "@mui/material/colors";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import type { RootState } from "../redux/store";
 
 const Header: React.FC = () => {
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+
+  console.log(cartItems);
+
   return (
     <Box
       py={4}
@@ -26,7 +32,27 @@ const Header: React.FC = () => {
             Products
           </Link>
         </Typography>
-        <AddShoppingCartIcon fontSize="large" />
+        <Box sx={{ display: "flex" }}>
+          <Link to="/carts">
+            <AddShoppingCartIcon fontSize="large" />
+          </Link>
+          <Typography
+            sx={{
+              backgroundColor: "red",
+              color: "white",
+              borderRadius: "50%",
+              textAlign: "center",
+              height: "25px",
+              width: "25px",
+              position: "absolute",
+              top: "20px",
+              right: "3px",
+              zIndex: 1,
+            }}
+          >
+            {cartItems.length}
+          </Typography>
+        </Box>
       </Box>
     </Box>
   );

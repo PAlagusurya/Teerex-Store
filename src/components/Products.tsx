@@ -67,6 +67,18 @@ const Products: React.FC = () => {
     setDebounceTimeout(timeout);
   };
 
+  const isPrinceinRange = (price: number, range: string): boolean => {
+    const [minValue, maxValue] = range.split("-");
+    const minRange = Number(minValue.replace("Rs.", "").trim());
+    const maxRange = maxValue
+      ? Number(maxValue.replace("Rs.", "").trim())
+      : null;
+
+    return maxRange !== null
+      ? price >= minRange && price <= maxRange
+      : price >= minRange;
+  };
+
   const filterAndSearch = () => {
     let filteredResponse = products;
 
@@ -83,10 +95,18 @@ const Products: React.FC = () => {
 
     Object.entries(checkedItems).every(([key, values]) => {
       filteredResponse = filteredResponse.filter((product) =>
-        Object.entries(checkedItems).every(
-          ([key, values]) =>
-            values.length === 0 || values.includes(product[key])
-        )
+        Object.entries(checkedItems).every(([key, values]) => {
+          if (key === "price") {
+            return (
+              values.length === 0 ||
+              values.some((range: string) =>
+                isPrinceinRange(product[key], range)
+              )
+            );
+          } else {
+            return values.length === 0 || values.includes(product[key]);
+          }
+        })
       );
     });
 

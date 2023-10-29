@@ -1,14 +1,7 @@
-import {
-  Typography,
-  Button,
-  IconButton,
-  TextField,
-  Box,
-  Stack,
-} from "@mui/material";
+import { Typography, Button, IconButton, Box, Stack } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -16,6 +9,8 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import { useDispatch } from "react-redux";
+import { addItem, removeItem, updateItem } from "../redux/cartSlice";
 
 interface props {
   id: number;
@@ -23,13 +18,20 @@ interface props {
   imageURL: string;
   price: number;
   quantity: number;
+  type: string;
+  currency: string;
+  color: string;
+  gender: string;
+  [key: string]: string | number;
 }
 
 const ProductList: React.FC<props> = (props) => {
-  const { imageURL, name, price, quantity } = props;
+  const { id, imageURL, name, price, quantity } = props;
   const [enableHandleItems, setEnableHandleItems] = useState<boolean>(false);
   const [quantityCount, setQuantityCount] = useState<number>(1);
   const [open, setOpen] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
 
   const handleClick = () => {
     setOpen(true);
@@ -47,9 +49,16 @@ const ProductList: React.FC<props> = (props) => {
   };
 
   const handleAddItem = () => {
-    // When adding an item, enable handling and set the initial quantity to 1
     setEnableHandleItems(true);
     setQuantityCount(1);
+    dispatch(addItem(props));
+    dispatch(
+      updateItem({
+        id,
+        quantityCount,
+        property: "quantityCount",
+      })
+    );
   };
 
   const handleIncrement = () => {
@@ -64,6 +73,7 @@ const ProductList: React.FC<props> = (props) => {
     if (quantityCount > 1) {
       setQuantityCount(quantityCount - 1);
     } else {
+      dispatch(removeItem(id));
       setEnableHandleItems(false);
     }
   };
@@ -74,6 +84,16 @@ const ProductList: React.FC<props> = (props) => {
   ) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
+
+  useEffect(() => {
+    dispatch(
+      updateItem({
+        id,
+        quantityCount,
+        property: "quantityCount",
+      })
+    );
+  }, [quantityCount]);
 
   return (
     <Card sx={{ maxWidth: 345 }}>

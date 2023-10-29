@@ -32,11 +32,7 @@ const Sidebar: React.FC<props> = ({
     }
   }, [products]);
 
-  const handleCheckboxChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    key: string,
-    item: any
-  ) => {
+  const handleCheckboxChange = (key: string, item: any) => {
     const updatedItem = { ...checkedItems };
 
     if (updatedItem[key]) {
@@ -71,10 +67,8 @@ const Sidebar: React.FC<props> = ({
                   key={item}
                   control={
                     <Checkbox
-                      checked={checkedItems[key]?.includes(item)}
-                      onChange={(event) =>
-                        handleCheckboxChange(event, key, item)
-                      }
+                      checked={checkedItems[key]?.includes(item) || false}
+                      onChange={() => handleCheckboxChange(key, item)}
                     />
                   }
                   label={item}
