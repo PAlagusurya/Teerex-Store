@@ -48,7 +48,8 @@ const CartItemsList: React.FC<CartItemsListProps> = (props) => {
     <Box
       sx={{
         display: "flex",
-        justifyContent: "space-evenly",
+        alignItems: "flex-start",
+        justifyContent: "space-around",
         width: "30vw",
       }}
     >
