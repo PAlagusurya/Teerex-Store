@@ -33,7 +33,7 @@ const Cart = () => {
             <CartItemsList {...cartItem} key={cartItem.id} />
           ))}
         </Stack>
-        <Divider sx={{ mt: 3 }} />
+        <Divider sx={{ mt: 3, borderTop: "2.5px solid grey", width: "35vw" }} />
         <Typography sx={{ fontWeight: 600, mt: 3 }}>
           Total Amount: Rs.{totalAmount}
         </Typography>

@@ -45,7 +45,13 @@ const CartItemsList: React.FC<CartItemsListProps> = (props) => {
   }, [choosenQuantity]);
 
   return (
-    <Stack direction="row" spacing={2}>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-evenly",
+        width: "30vw",
+      }}
+    >
       <img src={imageURL} alt={name} style={{ width: 100, height: 100 }} />
       <Stack>
         <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
@@ -74,6 +80,7 @@ const CartItemsList: React.FC<CartItemsListProps> = (props) => {
           </Select>
         </FormControl>
       </Box>
+
       <Box>
         <Button
           variant="outlined"
@@ -93,7 +100,7 @@ const CartItemsList: React.FC<CartItemsListProps> = (props) => {
           Delete
         </Button>
       </Box>
-    </Stack>
+    </Box>
   );
 };
 
