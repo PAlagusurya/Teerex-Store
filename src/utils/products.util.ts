@@ -25,7 +25,7 @@ const getProductsByCategory = (products: ProductDetail[]) => {
 
   if (result["price"]) {
     result["price"].splice(0, 4);
-    result["price"].push("0-Rs.250", "Rs.251-400", "Rs.450");
+    result["price"].push("0-Rs.250", "Rs.251-400", "Rs.450+");
   }
 
   return result;

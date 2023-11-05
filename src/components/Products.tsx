@@ -68,7 +68,9 @@ const Products: React.FC = () => {
   };
 
   const isPrinceinRange = (price: number, range: string): boolean => {
-    const [minValue, maxValue] = range.split("-");
+    const separators = range.includes("+") ? "+" : "-";
+    const [minValue, maxValue] = range.split(separators);
+
     const minRange = Number(minValue.replace("Rs.", "").trim());
     const maxRange = maxValue
       ? Number(maxValue.replace("Rs.", "").trim())
