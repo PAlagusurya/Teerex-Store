@@ -9,8 +9,6 @@ import type { RootState } from "../redux/store";
 const Header: React.FC = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
-  console.log(cartItems);
-
   return (
     <Box
       py={4}
@@ -34,7 +32,10 @@ const Header: React.FC = () => {
         </Typography>
         <Box sx={{ display: "flex" }}>
           <Link to="/carts">
-            <AddShoppingCartIcon fontSize="large" />
+            <AddShoppingCartIcon
+              data-testid="shopping-cart-icon"
+              fontSize="large"
+            />
           </Link>
           <Typography
             sx={{

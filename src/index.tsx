@@ -5,8 +5,10 @@ import App from "./App";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Products from "./components/Products";
 import Cart from "./components/Cart";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
-const appRouter = createBrowserRouter([
+export const appRouter = createBrowserRouter([
   {
     path: "/",
     element: <App />,
@@ -29,6 +31,8 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <RouterProvider router={appRouter} />
+    <Provider store={store}>
+      <RouterProvider router={appRouter} />
+    </Provider>
   </React.StrictMode>
 );

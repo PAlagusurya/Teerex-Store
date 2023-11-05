@@ -6,7 +6,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useDispatch } from "react-redux";
 import { removeItem, updateItem } from "../redux/cartSlice";
 
-interface props {
+export interface CartItemsListProps {
   id: number;
   name: string;
   imageURL: string;
@@ -16,7 +16,7 @@ interface props {
   [key: string]: string | number | undefined;
 }
 
-const CartItemsList: React.FC<props> = (props) => {
+const CartItemsList: React.FC<CartItemsListProps> = (props) => {
   const { id, imageURL, name, price, quantityCount, quantity } = props;
   const [choosenQuantity, setChoosenQuantity] = useState<any>(quantityCount);
   const dispatch = useDispatch();
@@ -77,6 +77,7 @@ const CartItemsList: React.FC<props> = (props) => {
       <Box>
         <Button
           variant="outlined"
+          role="delete"
           sx={{
             textTransform: "none",
             color: "black",

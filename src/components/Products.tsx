@@ -132,6 +132,7 @@ const Products: React.FC = () => {
       <Grid item xs={breakpoint ? 9 : 12} m={breakpoint ? 0 : 3}>
         <Box sx={{ display: "flex", mb: 5, gap: 3, ml: 5 }}>
           <TextField
+            data-testid="search-input"
             variant="standard"
             sx={{
               width: "50vw",
@@ -141,6 +142,7 @@ const Products: React.FC = () => {
           />
           <Button
             defaultValue={searchText}
+            data-testid="search-button"
             sx={{
               color: "white",
               backgroundColor: "black",
@@ -156,6 +158,7 @@ const Products: React.FC = () => {
           />
           {!breakpoint ? (
             <Button
+              data-testid="filter-button"
               sx={{
                 color: "white",
                 backgroundColor: "black",
@@ -174,7 +177,7 @@ const Products: React.FC = () => {
         <Grid container rowSpacing={3} columnSpacing={2}>
           {filteredProducts.map((item: ProductDetail) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
-              <ProductList {...item} />
+              <ProductList {...item} data-testid={`product-item-${item.id}`} />
             </Grid>
           ))}
         </Grid>

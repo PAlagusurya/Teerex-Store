@@ -3,7 +3,7 @@ import { Box, Typography, Stack, Divider } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { ProductDetail } from "../models/model";
-import CartItemsList from "./cartItemsList";
+import CartItemsList from "./CartItemsList";
 
 const Cart = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
@@ -23,7 +23,7 @@ const Cart = () => {
   }, [cartItems]);
 
   return (
-    <Box sx={{ m: 3 }}>
+    <Box sx={{ m: 3 }} data-testid="cart-item">
       <Typography variant="h5" mb={5}>
         Shopping Cart
       </Typography>

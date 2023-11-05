@@ -135,6 +135,7 @@ const ProductList: React.FC<props> = (props) => {
         ) : (
           <Button
             variant="contained"
+            data-testid="add-button"
             onClick={handleAddItem}
             sx={{
               backgroundColor: "black",
