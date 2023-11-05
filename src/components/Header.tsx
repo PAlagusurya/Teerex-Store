@@ -34,7 +34,7 @@ const Header: React.FC = () => {
           <Link to="/carts">
             <AddShoppingCartIcon
               data-testid="shopping-cart-icon"
-              fontSize="medium"
+              fontSize="large"
             />
           </Link>
           <Typography
