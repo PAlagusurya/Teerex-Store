@@ -55,10 +55,10 @@ const CartItemsList: React.FC<CartItemsListProps> = (props) => {
     >
       <img src={imageURL} alt={name} style={{ width: 100, height: 100 }} />
       <Stack>
-        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+        <Typography variant="subtitle2" sx={{ fontWeight: 500 }}>
           {name}
         </Typography>
-        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+        <Typography variant="subtitle2" sx={{ fontWeight: 500 }}>
           Rs.{price}
         </Typography>
       </Stack>
